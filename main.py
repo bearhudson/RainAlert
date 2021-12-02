@@ -43,14 +43,14 @@ while in_processing:
     for hour_weather in weather_slice:
         cur_fc_time = hour_weather['dt']
         cur_fc = hour_weather['weather'][0]['id']
-        time_converted_hours = datetime.datetime.fromtimestamp(cur_fc_time).strftime('%H')
+        time_converted = datetime.datetime.fromtimestamp(cur_fc_time).strftime('%H')
         cond_sum += cur_fc
         for cond in cond_json:
             if cur_fc == cond['code']:
                 cur_fc_txt = cond['description']
-        print(f"{time_converted_hours} o'clock -- cond: {cur_fc_txt}")
+        print(f"{time_converted} o'clock -- cond: {cur_fc_txt}")
         if cur_fc <= 622:
-            email_message(f"Possible Precipitation soon at around {time_converted_hours} o'clock -- "
+            email_message(f"Possible Precipitation soon at around {time_converted} o'clock -- "
                           f"fc {cur_fc_txt}")
 
     cur_cond = "Error"
