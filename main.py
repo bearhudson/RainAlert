@@ -9,7 +9,7 @@ from email_message import email_message
 
 API_KEY = os.environ.get("OPENWEATHER_API_KEY")
 ZIPCODE = os.environ.get("ZIPCODE")
-HOURS = 6
+HOURS = 4
 
 # load cond list
 with open("condition_codes.json", mode='r') as file:
@@ -49,8 +49,8 @@ while in_processing:
                 cur_fc_txt = cond['description']
         print(f"{time_converted} o'clock forecast: {cur_fc_txt}")
         if cur_fc <= 622:
-            email_message(f"Possible Precipitation soon at around {time_converted} o'clock -- "
-                          f"fc {cur_fc_txt}")
+            email_message(f"Possible Precipitation soon!\n Around {time_converted} o'clock"
+                          f" forecast: {cur_fc_txt}")
 
     cur_cond = "Error"
     if cond_sum <= 232 * HOURS:
