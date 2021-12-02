@@ -49,7 +49,7 @@ while in_processing:
                 cur_fc_txt = cond['description']
         print(f"{time_converted} o'clock forecast: {cur_fc_txt}")
         if cur_fc <= 622:
-            email_message(f"Possible Precipitation soon!\n Around {time_converted} o'clock"
+            email_message(f"Possible Precipitation soon!\n{time_converted} o'clock"
                           f" forecast: {cur_fc_txt}")
 
     cur_cond = "Error"
