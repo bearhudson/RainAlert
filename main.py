@@ -7,19 +7,18 @@ import json
 import time
 from email_message import email_message
 
-
-HOURS = 1
+API_KEY = os.environ.get("OPENWEATHER_API_KEY")
+ZIPCODE = os.environ.get("ZIPCODE")
+HOURS = 6
 
 # load cond list
 with open("condition_codes.json", mode='r') as file:
     cond_json = json.load(file)
 
 # load lat/lon from zip
-api_key = os.environ.get("OPENWEATHER_API_KEY")
-zipcode = os.environ.get("ZIPCODE")
 payload = {
-    'zip': zipcode,
-    'appid': api_key
+    'zip': ZIPCODE,
+    'appid': API_KEY
 }
 zip_request = requests.get(url='http://api.openweathermap.org/geo/1.0/zip', params=payload)
 zip_request.raise_for_status()
@@ -30,7 +29,7 @@ while in_processing:
     payload = {
         "lat": zip_json['lat'],
         "lon": zip_json['lon'],
-        "appid": api_key,
+        "appid": API_KEY,
         "exclude": "daily,current,minutely,alerts",
     }
     request_api = requests.get(url=f'https://api.openweathermap.org/data/2.5/onecall', params=payload)
@@ -48,7 +47,7 @@ while in_processing:
         for cond in cond_json:
             if cur_fc == cond['code']:
                 cur_fc_txt = cond['description']
-        print(f"{time_converted} o'clock -- cond: {cur_fc_txt}")
+        print(f"{time_converted} o'clock forecast: {cur_fc_txt}")
         if cur_fc <= 622:
             email_message(f"Possible Precipitation soon at around {time_converted} o'clock -- "
                           f"fc {cur_fc_txt}")
@@ -65,6 +64,6 @@ while in_processing:
     elif cond_sum <= 781 * HOURS:
         cur_cond = "Extreme Event!"
     elif cond_sum <= 804 * HOURS:
-        cur_cond = "No Precipitation"
-    print(f"Overall cond: {cur_cond}")
+        cur_cond = "None Forecasted"
+    print(f"Overall Precipitation: {cur_cond}")
     time.sleep(360)
